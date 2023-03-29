@@ -1,62 +1,17 @@
-*~
-.svn
-.cvs
-.git
-.listing
-*.bak
-*.swp
-*.log
-plugins/wp-file-cache/cache
-cache
-_wpeprivate
-.cache
-temp
-tmp
-*.tmp
-imagecache*
-uploads*
-*_backup
-Backup
-backup
-gt-cache
-ics-importer-cache
-wp-config-sample.php
-wp-content/w3tc*
-wp-content/w3-*
-wp-content/plugins/wpengine-snapshot/snapshots/*
-wp-content/uploads/snapshots
-wp-content/themes/thesis*/custom/cache
-wp-content/themes/thesis*/lib/scripts/cache
-wp-content/themes/*/cache
-wp-content/plugins/*/cache
-wp-content/w3tc-bak
-wp-content/backup*
-wp-content/temp*
-wp-content/debug.log
-wp-content/backups
-wp-content/managewp
-wp-content/upgrade/*
-wp-content/uploads
-wp-content/blogs.dir/*/*
-pclzip-*
+# Ignorar los directorios de subida de archivos de WordPress
+wp-content/uploads/
 
-# WordPress debugging files
-log.txt
-debug.log
+# Ignorar los archivos de caché de WordPress
+wp-content/cache/
+wp-content/upgrade/
+wp-content/wflogs/
 
-# Gallaries in various places
-gallery/*
-wp-content/gallery/*
-wp-content/album/*
+# Ignorar archivos de configuración específicos del servidor
+wp-config.php
 
-# Found in 'sneakernews' - probably just a backup but never going to be good to include
-wp-content/plugins/plugins
+# Ignorar el archivo de registro de errores de PHP
+error_log
 
-# Found in the root of pod-1009
-.a
-
-# Forum software we probably shouldn't support anyway
-forum/*
 
 # known large file types
 *.hqx
@@ -95,3 +50,7 @@ forum/*
 *.tar
 *.tgz
 *.gz
+
+# Ignorar el directorio .git y sus archivos
+.git/
+.gitignore
