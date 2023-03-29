@@ -53,9 +53,8 @@ readme.txt
 *.tgz
 *.gz
 
-# Ignorar el directorio .git y sus archivos
-.git/
-.gitignore
+# Eliminacion del readme.html
+readme.html
 
 # eliminacion de archivos .htaccess
 .htaccess
