@@ -12,6 +12,8 @@ wp-config.php
 # Ignorar el archivo de registro de errores de PHP
 error_log
 
+# Eliminacion del archivo readme.txt
+readme.txt
 
 # known large file types
 *.hqx
