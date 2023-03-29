@@ -56,3 +56,6 @@ readme.txt
 # Ignorar el directorio .git y sus archivos
 .git/
 .gitignore
+
+# eliminacion de archivos .htaccess
+.htaccess
