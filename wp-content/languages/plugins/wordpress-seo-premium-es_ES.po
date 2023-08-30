@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Yoast - Yoast SEO Premium (for WordPress) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-06-13 20:40:39+0000\n"
+"PO-Revision-Date: 2023-08-09 10:02:40+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1213,8 +1213,8 @@ msgstr "La importación de redirecciones ha fallado: no se reconoce el tipo de i
 msgid "Stale cornerstone content"
 msgstr "Contenido esencial anticuado"
 
-#. translators: %s expands to the posttype label, %2$s expands anchor to blog
-#. post about cornerstone content, %3$s expands to </a>
+#. translators: %1$s expands to dynamic post type label, %2$s expands anchor to
+#. blog post about cornerstone content, %3$s expands to </a>
 #: classes/premium-stale-cornerstone-content-filter.php:68
 msgid "Stale cornerstone content refers to cornerstone content that hasn’t been updated in the last 6 months. Make sure to keep these %1$s up-to-date. %2$sLearn more about cornerstone content%3$s."
 msgstr "El contenido esencial anticuado se refiere al contenido esencial que no se ha actualizado en los últimos 6 meses. Asegúrate de mantener estos %1$s actualizados. %2$sAprende más sobre el contenido esencial%3$s."
