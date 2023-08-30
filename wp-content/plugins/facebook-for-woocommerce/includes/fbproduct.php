@@ -48,6 +48,46 @@ class WC_Facebook_Product {
 		'variation' => 1,
 	);
 
+	/**
+	 * @var int WC_Product ID.
+	 */
+	public $id;
+
+	/**
+	 * @var WC_Product
+	 */
+	public $woo_product;
+
+	/**
+	 * @var string Facebook Product Description.
+	 */
+	private $fb_description;
+
+	/**
+	 * @var array Gallery URLs.
+	 */
+	private $gallery_urls;
+
+	/**
+	 * @var bool Use parent image for variable products.
+	 */
+	private $fb_use_parent_image;
+
+	/**
+	 * @var string Product Description.
+	 */
+	private $main_description;
+
+	/**
+	 * @var bool  Sync short description.
+	 */
+	private $sync_short_description;
+
+	/**
+	 * @var bool Product visibility on Facebook.
+	 */
+	public $fb_visibility;
+
 	public function __construct( $wpid, $parent_product = null ) {
 
 		if ( $wpid instanceof WC_Product ) {
@@ -78,6 +118,24 @@ class WC_Facebook_Product {
 			$this->fb_use_parent_image = $parent_product->get_use_parent_image();
 			$this->main_description    = $parent_product->get_fb_description();
 		}
+	}
+
+	/**
+	 * __get method for backward compatibility.
+	 *
+	 * @param string $key property name
+	 * @return mixed
+	 * @since 3.0.32
+	 */
+	public function __get( $key ) {
+		// Add warning for private properties.
+		if ( in_array( $key, array( 'fb_description', 'gallery_urls', 'fb_use_parent_image', 'main_description', 'sync_short_description' ), true ) ) {
+			/* translators: %s property name. */
+			_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( 'The %s property is private and should not be accessed outside its class.', 'facebook-for-woocommerce' ), esc_html( $key ) ), '3.0.32' );
+			return $this->$key;
+		}
+
+		return null;
 	}
 
 	public function exists() {
@@ -574,6 +632,17 @@ class WC_Facebook_Product {
 				'image_url'             => $image_urls[0],
 				'additional_image_urls' => $this->get_additional_image_urls( $image_urls ),
 				'url'                   => $product_url,
+				/**
+				 * 'category' is a required field for creating a ProductItem object when posting to /{product_catalog_id}/products.
+				 * This field should have the Google product category for the item. Google product category is not a required field
+				 * in the WooCommerce product editor. Hence, we are setting 'category' to Woo product categories by default and overriding
+				 * it when a Google product category is set.
+				 *
+				 * @see https://developers.facebook.com/docs/marketing-api/reference/product-catalog/products/#parameters-2
+				 * @see https://github.com/woocommerce/facebook-for-woocommerce/pull/2575
+				 * @see https://github.com/woocommerce/facebook-for-woocommerce/issues/2593
+				 */
+				'category'              => $categories['categories'],
 				'product_type'          => $categories['categories'],
 				'brand'                 => Helper::str_truncate( $brand, 100 ),
 				'retailer_id'           => $retailer_id,

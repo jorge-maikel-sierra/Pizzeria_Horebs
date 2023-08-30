@@ -4,17 +4,12 @@
  * Description: Elevate your designs and unlock the full power of Elementor. Gain access to dozens of Pro widgets and kits, Theme Builder, Pop Ups, Forms and WooCommerce building capabilities.
  * Plugin URI: https://go.elementor.com/wp-dash-wp-plugins-author-uri/
  * Author: Elementor.com
- * Version: 3.14.1
- * Elementor tested up to: 3.14.0
+ * Version: 3.15.1
+ * Elementor tested up to: 3.15.0
  * Author URI: https://go.elementor.com/wp-dash-wp-plugins-author-uri/
  *
  * Text Domain: elementor-pro
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
-
 if ( get_option('_elementor_pro_license_data') ) {
 	delete_option( '_elementor_pro_license_data');
 }
@@ -22,28 +17,50 @@ if ( get_option('_elementor_pro_license_data') ) {
 update_option( 'elementor_pro_license_key', 'activated' );
 update_option( '_elementor_pro_license_v2_data', [ 'timeout' => strtotime( '+12 hours', current_time( 'timestamp' ) ), 'value' => json_encode( [ 'success' => true, 'license' => 'valid', 'expires' => '01.01.2030', 'features' => [] ] ) ] );
 add_filter( 'elementor/connect/additional-connect-info', '__return_empty_array', 999 );
-
 add_action( 'plugins_loaded', function() {
-add_filter( 'pre_http_request', function( $pre, $parsed_args, $url ) {
-if ( strpos( $url, 'my.elementor.com/api/v2/licenses' ) !== false ) {
-return [
-'response' => [ 'code' => 200, 'message' => 'ОК' ],
-'body' => json_encode( [ 'success' => true, 'license' => 'valid', 'expires' => '01.01.2030' ] )
-];
-} elseif ( strpos( $url, 'my.elementor.com/api/connect/v1/library/get_template_content' ) !== false ) {
-$response = wp_remote_get( "http://wordpressnull.org/elementor/templates/{$parsed_args['body']['id']}.json", [ 'sslverify' => false, 'timeout' => 25 ] );
-if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
-return $response;
-} else {
-return $pre;
-}
-} else {
-return $pre;
-}
-}, 10, 3 );
+	add_filter( 'pre_http_request', function( $pre, $parsed_args, $url ){
+		if ( strpos( $url, 'my.elementor.com' ) !== false ) {
+			$url = str_replace( 'https', 'http', $url );
+			$parsed_args['timeout'] = 300;
+			$parsed_args['sslverify'] = false;
+			
+			if ( strpos( $url, '/api/v2/license/validate' ) !== false ) {
+				$url = str_replace( 'my.elementor.com/api/v2/license/validate', 'easytonull.my.id/elementor/validate', $url );
+				return wp_remote_get( $url, $parsed_args );
+			} elseif ( strpos( $url, '/api/v2/license/activate' ) !== false ) {
+				$url = str_replace( 'my.elementor.com/api/v2/license/activate', 'easytonull.my.id/elementor/activate', $url );
+				return wp_remote_get( $url, $parsed_args );
+			} elseif ( strpos( $url, '/api/v2/pro/info' ) !== false ) {
+				$url = str_replace( 'my.elementor.com/api/v2/pro/info', 'easytonull.my.id/elementor/pro/info', $url );
+				return wp_remote_get( $url, $parsed_args );
+			} elseif ( strpos( $url, '/api/v1/pro-downloads' ) !== false ) {
+				$url = str_replace( 'my.elementor.com/api/v1/pro-downloads', 'easytonull.my.id/elementor/pro-downloads', $url );
+				return wp_remote_get( $url, $parsed_args );
+			} elseif ( strpos( $url, '/api/v1/kits-library/taxonomies' ) !== false ) {
+				$url = str_replace( 'my.elementor.com/api/v1/kits-library/taxonomies', 'easytonull.my.id/elementor/kits-library/taxonomies', $url );
+				return wp_remote_get( $url, $parsed_args );
+			} elseif ( strpos( $url, '/api/v1/kits-library/kits/' ) !== false && substr( $url, -13 ) === 'download-link' ) {
+				$url = str_replace( 'my.elementor.com/api/v1/kits-library/kits/', 'easytonull.my.id/elementor/kits-library/kits/download-link/', $url );
+				return wp_remote_get( $url, $parsed_args );
+			}elseif ( strpos( $url, 'my.elementor.com/api/connect/v1/library/get_template_content' ) !== false ) {
+					$response = wp_remote_get( "http://wordpressnull.org/elementor/templates/{$parsed_args['body']['id']}.json", [ 'sslverify' => false, 'timeout' => 25 ] );
+				if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+					return $response;
+				} else {
+					return $pre;
+				}
+			} 
+			
+		}
+			return $pre;
+	}, 10, 3 );
 } );
 
-define( 'ELEMENTOR_PRO_VERSION', '3.14.1' );
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+define( 'ELEMENTOR_PRO_VERSION', '3.15.1' );
 
 /**
  * All versions should be `major.minor`, without patch, in order to compare them properly.
@@ -51,8 +68,8 @@ define( 'ELEMENTOR_PRO_VERSION', '3.14.1' );
  * (e.g. Core 3.14.0-beta1 and Core 3.14.0-cloud2 should be fine when requiring 3.14, while
  * requiring 3.14.2 is not allowed)
  */
-define( 'ELEMENTOR_PRO_REQUIRED_CORE_VERSION', '3.12' );
-define( 'ELEMENTOR_PRO_RECOMMENDED_CORE_VERSION', '3.14' );
+define( 'ELEMENTOR_PRO_REQUIRED_CORE_VERSION', '3.13' );
+define( 'ELEMENTOR_PRO_RECOMMENDED_CORE_VERSION', '3.15' );
 
 define( 'ELEMENTOR_PRO__FILE__', __FILE__ );
 define( 'ELEMENTOR_PRO_PLUGIN_BASE', plugin_basename( ELEMENTOR_PRO__FILE__ ) );
